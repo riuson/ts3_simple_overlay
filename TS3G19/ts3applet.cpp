@@ -10,32 +10,32 @@
 #define CHARS_PRO_LINE (29)
 #define NUMBER_MESSAGES (3)
 
-struct message
+static struct message
 {
 	wchar_t Sender[30];
 	wchar_t Message[146];
 	anyID TargetMode;
 } Messages[NUMBER_MESSAGES];
 
-void ts3applet_setBackground()
+void ts3g19_init()
 {
 	BYTE colorBitmap[BITMAP_SIZE];
+	
+	// Init
+	LogiLcdInit(L"TS3 Applet", LOGI_LCD_TYPE_COLOR);
+	LogiLcdColorSetTitle(L"TeamSpeak 3", 0, 0, 0);
 
+	// Init background
 	for(int i = 0; i < BITMAP_SIZE; i++)
 	{
 		colorBitmap[i] = 245;
 	}
-
 	LogiLcdColorSetBackground(colorBitmap);
-}
 
-void ts3applet_init()
-{
-	LogiLcdInit(L"TS3 Applet", LOGI_LCD_TYPE_COLOR);
-	ts3applet_setBackground();
-	LogiLcdColorSetTitle(L"TeamSpeak 3", 0, 0, 0);
+	// Get it on screen
 	LogiLcdUpdate();
 
+	// Initialize the messages array
 	for(int i = 0; i < NUMBER_MESSAGES; i++)
 	{
 		Messages[i].Sender[29] = L'\0';
@@ -43,12 +43,12 @@ void ts3applet_init()
 	}
 }
 
-void ts3applet_shutdown()
+void ts3g19_shutdown()
 {
 	LogiLcdShutdown();
 }
 
-void ts3applet_newMessage(wchar_t* sender, wchar_t* message, anyID TargetMode)
+void ts3g19_newMessage(wchar_t *sender, wchar_t *message, anyID TargetMode)
 {
 	static short index = NUMBER_MESSAGES - 1;
 	int display;
@@ -74,5 +74,11 @@ void ts3applet_newMessage(wchar_t* sender, wchar_t* message, anyID TargetMode)
 			display--;
 	}
 
+	LogiLcdUpdate();
+}
+
+void ts3g19_updateChannel(wchar_t *channelName)
+{
+	LogiLcdColorSetTitle(channelName, 0, 0, 0);
 	LogiLcdUpdate();
 }
