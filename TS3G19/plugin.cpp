@@ -7,9 +7,6 @@
 #include "stdafx.h"
 
 #include "public_errors.h"
-#include "public_errors_rare.h"
-#include "public_definitions.h"
-#include "public_rare_definitions.h"
 #include "ts3_functions.h"
 #include "plugin.h"
 #include "ts3applet.h"
@@ -121,9 +118,20 @@ void ts3plugin_onClientMoveEvent(uint64 serverConnectionHandlerID, anyID clientI
 	char *channelName;
 	wchar_t *wcChannelName;
 	int size;
+	anyID client;
+
+	// Only the own client
+	ts3Functions.getClientID(serverConnectionHandlerID, &client);
+	if(!(clientID == client))
+	{
+		return;
+	}
 
 	// Get channel name
-	ts3Functions.getChannelVariableAsString(serverConnectionHandlerID, newChannelID, CHANNEL_NAME, &channelName);
+	if(ts3Functions.getChannelVariableAsString(serverConnectionHandlerID, newChannelID, CHANNEL_NAME, &channelName) != ERROR_ok)
+	{
+		return;
+	}
 
 	// Convert the channel name to wide chars
 	size = MultiByteToWideChar(CP_UTF8, 0, channelName, -1, NULL, 0);
@@ -139,22 +147,5 @@ void ts3plugin_onClientMoveEvent(uint64 serverConnectionHandlerID, anyID clientI
 }
 
 void ts3plugin_onClientMoveMovedEvent(uint64 serverConnectionHandlerID, anyID clientID, uint64 oldChannelID, uint64 newChannelID, int visibility, anyID moverID, const char* moverName, const char* moverUniqueIdentifier, const char* moveMessage) {
-	char *channelName;
-	wchar_t *wcChannelName;
-	int size;
-
-	// Get channel name
-	ts3Functions.getChannelVariableAsString(serverConnectionHandlerID, newChannelID, CHANNEL_NAME, &channelName);
-
-	// Convert the channel name to wide chars
-	size = MultiByteToWideChar(CP_UTF8, 0, channelName, -1, NULL, 0);
-	wcChannelName = new wchar_t[size];
-	MultiByteToWideChar(CP_UTF8, 0, channelName, -1, wcChannelName, size);
-
-	// Write it on G19
-	ts3g19_updateChannel(wcChannelName);
-
-	// Free the memory
-	ts3Functions.freeMemory(channelName);
-	delete[] wcChannelName;
+	ts3plugin_onClientMoveEvent(serverConnectionHandlerID, clientID, oldChannelID, newChannelID, visibility, moveMessage);
 }
