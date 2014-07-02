@@ -26,12 +26,12 @@ static char* pluginID = NULL;
 
 /* Unique name identifying this plugin */
 const char* ts3plugin_name() {
-	return "G19 Applet";
+	return "TS3 Simple Overlay";
 }
 
 /* Plugin version */
 const char* ts3plugin_version() {
-	return "1.0";
+	return "0.1";
 }
 
 /* Plugin API version. Must be the same as the clients API major version, else the plugin fails to load. */
@@ -41,12 +41,12 @@ int ts3plugin_apiVersion() {
 
 /* Plugin author */
 const char* ts3plugin_author() {
-	return "Fabian Parzefall";
+	return "riuson";
 }
 
 /* Plugin description */
 const char* ts3plugin_description() {
-	return "This plugin prints some information on your Logitech G19 screen.";
+	return "This plugin just displays overlay.";
 }
 
 /* Set TeamSpeak 3 callback functions */
