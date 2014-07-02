@@ -13,7 +13,7 @@
 
 static struct TS3Functions ts3Functions;
 
-#define PLUGIN_API_VERSION 19
+#define PLUGIN_API_VERSION 20
 
 #define PATH_BUFSIZE 512
 
