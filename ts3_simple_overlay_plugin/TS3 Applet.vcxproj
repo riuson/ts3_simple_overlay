@@ -22,7 +22,7 @@
     <ProjectGuid>{D0416DE8-C3CF-4583-83B5-AB051185A4D2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TS3Applet</RootNamespace>
-    <ProjectName>TS3G19</ProjectName>
+    <ProjectName>ts3_simple_overlay_plugin</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
