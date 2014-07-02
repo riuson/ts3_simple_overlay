@@ -13,7 +13,7 @@
 
 static struct TS3Functions ts3Functions;
 
-#define PLUGIN_API_VERSION 19
+#define PLUGIN_API_VERSION 20
 
 #define PATH_BUFSIZE 512
 
@@ -26,7 +26,7 @@ static char* pluginID = NULL;
 
 /* Unique name identifying this plugin */
 const char* ts3plugin_name() {
-	return "G19 Applet";
+	return "TS3 Simple Overlay";
 }
 
 /* Plugin version */
@@ -41,12 +41,12 @@ int ts3plugin_apiVersion() {
 
 /* Plugin author */
 const char* ts3plugin_author() {
-	return "Fabian Parzefall";
+	return "riuson";
 }
 
 /* Plugin description */
 const char* ts3plugin_description() {
-	return "This plugin prints some information on your Logitech G19 screen.";
+	return "This plugin just displays overlay.";
 }
 
 /* Set TeamSpeak 3 callback functions */
@@ -60,7 +60,7 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 */
 int ts3plugin_init() {
 
-	ts3g19_init();
+	ts3_applet_init();
 
 	return 0;  /* 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning */
 	/* -2 is a very special case and should only be used if a plugin displays a dialog (e.g. overlay) asking the user to disable
@@ -70,7 +70,7 @@ int ts3plugin_init() {
 
 /* Custom code called right before the plugin is unloaded */
 void ts3plugin_shutdown() {
-	ts3g19_shutdown();
+	ts3_applet_shutdown();
 
 	/* Free pluginID if we registered it */
 	if(pluginID) {
@@ -106,7 +106,7 @@ int ts3plugin_onTextMessageEvent(uint64 serverConnectionHandlerID, anyID targetM
 	MultiByteToWideChar(CP_UTF8, 0, message, -1, wcmessage, size);
 
 	// Push the message to G19
-	ts3g19_newMessage(sender, wcmessage, targetMode);
+	ts3_applet_newMessage(sender, wcmessage, targetMode);
 
 	// Free the memory
 	delete[] sender, wcmessage;
@@ -139,7 +139,7 @@ void ts3plugin_onClientMoveEvent(uint64 serverConnectionHandlerID, anyID clientI
 	MultiByteToWideChar(CP_UTF8, 0, channelName, -1, wcChannelName, size);
 
 	// Write it on G19
-	ts3g19_updateChannel(wcChannelName);
+	ts3_applet_updateChannel(wcChannelName);
 
 	// Free the memory
 	ts3Functions.freeMemory(channelName);

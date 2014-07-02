@@ -1,12 +1,6 @@
-TS3G19
+TS3 Simple Overlay
 ======
-This is a plugin for TeamSpeak 3, that displays TS3 related information on your Logitech G19 display.
+This is a plugin for TeamSpeak 3, that just displays overlay.
 
-Current Features
 ----------------
-* Display chat messages
-* More is in development!
-
-Installation
-------------
-In order to run this plugin, you have to place the LogitechLcd.dll in your TeamSpeak 3 installation directory.
+* Under development
