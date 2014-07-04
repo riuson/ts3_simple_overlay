@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "thread.h"
+
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -20,6 +22,9 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	WSADATA wsaData;
     int iResult;
+
+    Thread th;
+    th.start();
 
     SOCKET ListenSocket = INVALID_SOCKET;
     SOCKET ClientSocket = INVALID_SOCKET;

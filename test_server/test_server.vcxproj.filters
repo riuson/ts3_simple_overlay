@@ -24,12 +24,18 @@
     <ClInclude Include="targetver.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="thread.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="test_server.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="thread.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
