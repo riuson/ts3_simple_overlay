@@ -1,39 +1,26 @@
-/*
- * TeamSpeak 3 demo plugin
- *
- * Copyright (c) 2008-2013 TeamSpeak Systems GmbH
- */
-
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#ifdef WIN32
-#define PLUGINS_EXPORTDLL __declspec(dllexport)
-#else
-#define PLUGINS_EXPORTDLL __attribute__ ((visibility("default")))
-#endif
+#include "ts3_overlay_global.h"
+
+/* Required functions */
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Required functions */
-PLUGINS_EXPORTDLL const char* ts3plugin_name();
-PLUGINS_EXPORTDLL const char* ts3plugin_version();
-PLUGINS_EXPORTDLL int ts3plugin_apiVersion();
-PLUGINS_EXPORTDLL const char* ts3plugin_author();
-PLUGINS_EXPORTDLL const char* ts3plugin_description();
-PLUGINS_EXPORTDLL void ts3plugin_setFunctionPointers(const struct TS3Functions funcs);
-PLUGINS_EXPORTDLL int ts3plugin_init();
-PLUGINS_EXPORTDLL void ts3plugin_shutdown();
-
-/* Clientlib */
-PLUGINS_EXPORTDLL int  ts3plugin_onTextMessageEvent(uint64 serverConnectionHandlerID, anyID targetMode, anyID toID, anyID fromID, const char* fromName, const char* fromUniqueIdentifier, const char* message, int ffIgnored);
-PLUGINS_EXPORTDLL void ts3plugin_onClientMoveEvent(uint64 serverConnectionHandlerID, anyID clientID, uint64 oldChannelID, uint64 newChannelID, int visibility, const char* moveMessage);
-PLUGINS_EXPORTDLL void ts3plugin_onClientMoveMovedEvent(uint64 serverConnectionHandlerID, anyID clientID, uint64 oldChannelID, uint64 newChannelID, int visibility, anyID moverID, const char* moverName, const char* moverUniqueIdentifier, const char* moveMessage);
+TS3_LIB_EXPORT const char* ts3plugin_name();
+TS3_LIB_EXPORT const char* ts3plugin_version();
+TS3_LIB_EXPORT int ts3plugin_apiVersion();
+TS3_LIB_EXPORT const char* ts3plugin_author();
+TS3_LIB_EXPORT const char* ts3plugin_description();
+TS3_LIB_EXPORT void ts3plugin_setFunctionPointers(const struct TS3Functions funcs);
+TS3_LIB_EXPORT int ts3plugin_init();
+TS3_LIB_EXPORT void ts3plugin_shutdown();
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif // PLUGIN_H
