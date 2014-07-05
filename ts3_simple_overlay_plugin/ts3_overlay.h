@@ -4,12 +4,18 @@
 #include "ts3_overlay_global.h"
 
 class QLabel;
+class QWidget;
 
 class Ts3_overlay
 {
 public:
     Ts3_overlay();
     ~Ts3_overlay();
+
+    void showOverlay();
+    void hideOverlay();
+
+    void runSettings(void *parent = NULL);
 
 private:
     QLabel *mLabelTest;

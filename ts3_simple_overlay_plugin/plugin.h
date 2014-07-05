@@ -5,6 +5,11 @@
 
 /* Required functions */
 
+#include "includes/public_definitions.h"
+#include "includes/plugin_definitions.h"
+
+extern struct TS3Functions ts3Functions;
+extern char* pluginID;
 
 #ifdef __cplusplus
 extern "C" {
