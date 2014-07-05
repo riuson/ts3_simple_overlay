@@ -9,7 +9,7 @@
 #include "includes/plugin_definitions.h"
 
 extern struct TS3Functions ts3Functions;
-extern char* pluginID;
+//extern char* pluginID;
 
 #ifdef __cplusplus
 extern "C" {

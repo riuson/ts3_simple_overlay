@@ -17,6 +17,8 @@ public:
 
     void runSettings(void *parent = NULL);
 
+    void onTalkStatusChangeEvent(quint64 serverConnectionHandlerID, qint32 status, qint32 isReceivedWhisper, quint64 clientID);
+
 private:
     QLabel *mLabelTest;
 };

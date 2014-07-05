@@ -131,3 +131,10 @@ void ts3plugin_configure(void* handle, void* qParentWidget) {
 
     // The client will call ts3plugin_freeMemory to release all allocated memory
 //}
+
+void ts3plugin_onTalkStatusChangeEvent(uint64 serverConnectionHandlerID, int status, int isReceivedWhisper, anyID clientID)
+{
+    if (pluginObj != NULL) {
+        pluginObj->onTalkStatusChangeEvent(serverConnectionHandlerID, status, isReceivedWhisper, clientID);
+    }
+}
