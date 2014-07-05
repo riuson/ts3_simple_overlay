@@ -9,7 +9,8 @@
 #define PLUGIN_API_VERSION 20
 #define PATH_BUFSIZE 512
 
-Ts3_overlay *pluginObj;
+static Ts3_overlay *pluginObj;
+struct TS3Functions ts3Functions;
 
 //********************************** Required functions ************************************
 //
@@ -43,7 +44,7 @@ const char* ts3plugin_description() {
 
 // Set TeamSpeak 3 callback functions
 void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
-    //ts3Functions = funcs;
+    ts3Functions = funcs;
 }
 
 //
@@ -53,6 +54,7 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 int ts3plugin_init() {
 
     pluginObj = new Ts3_overlay();
+    pluginObj->setFunctionPointers(ts3Functions);
 
     return 0;
     // 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning
