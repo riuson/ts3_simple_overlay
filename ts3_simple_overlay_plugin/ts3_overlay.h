@@ -5,7 +5,7 @@
 #include "includes/public_definitions.h"
 #include "includes/ts3_functions.h"
 
-class QLabel;
+class FormOverlay;
 class QWidget;
 
 class Ts3_overlay
@@ -23,7 +23,7 @@ public:
     void onTalkStatusChangeEvent(quint64 serverConnectionHandlerID, qint32 status, qint32 isReceivedWhisper, anyID clientID);
 
 private:
-    QLabel *mLabelTest;
+    FormOverlay *mOverlay;
     TS3Functions mTS3Funcs;
 };
 
