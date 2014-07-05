@@ -4,10 +4,12 @@
 #include "includes/public_errors.h"
 #include "includes/ts3_functions.h"
 
-#define PLUGIN_API_VERSION 20
+#include "ts3_overlay.h"
 
+#define PLUGIN_API_VERSION 20
 #define PATH_BUFSIZE 512
 
+Ts3_overlay *pluginObj;
 
 //********************************** Required functions ************************************
 //
@@ -50,7 +52,7 @@ void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
 //
 int ts3plugin_init() {
 
-    //ts3_applet_init();
+    pluginObj = new Ts3_overlay();
 
     return 0;
     // 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning
@@ -61,7 +63,9 @@ int ts3plugin_init() {
 
 // Custom code called right before the plugin is unloaded
 void ts3plugin_shutdown() {
-    //ts3_applet_shutdown();
+
+    delete pluginObj;
+    pluginObj = NULL;
 
     // Free pluginID if we registered it
     //if(pluginID) {
