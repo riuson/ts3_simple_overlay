@@ -1,151 +1,133 @@
-/*
-* TeamSpeak 3 demo plugin
-*
-* Copyright (c) 2008-2013 TeamSpeak Systems GmbH
-*/
-
-#include "stdafx.h"
-
-#include "public_errors.h"
-#include "ts3_functions.h"
 #include "plugin.h"
-#include "ts3applet.h"
 
-static struct TS3Functions ts3Functions;
+
+#include "includes/public_errors.h"
+#include "includes/ts3_functions.h"
+
+#include "ts3_overlay.h"
 
 #define PLUGIN_API_VERSION 20
-
 #define PATH_BUFSIZE 512
 
-static char* pluginID = NULL;
+Ts3_overlay *pluginObj;
 
-/*********************************** Required functions ************************************/
-/*
-* If any of these required functions is not implemented, TS3 will refuse to load the plugin
-*/
+//********************************** Required functions ************************************
+//
+// If any of these required functions is not implemented, TS3 will refuse to load the plugin
+//
 
-/* Unique name identifying this plugin */
+// Unique name identifying this plugin
 const char* ts3plugin_name() {
-	return "TS3 Simple Overlay";
+    return "TS3 Simple Overlay";
 }
 
-/* Plugin version */
+// Plugin version
 const char* ts3plugin_version() {
-	return "1.0";
+    return "1.0";
 }
 
-/* Plugin API version. Must be the same as the clients API major version, else the plugin fails to load. */
+// Plugin API version. Must be the same as the clients API major version, else the plugin fails to load.
 int ts3plugin_apiVersion() {
-	return PLUGIN_API_VERSION;
+    return PLUGIN_API_VERSION;
 }
 
-/* Plugin author */
+// Plugin author
 const char* ts3plugin_author() {
-	return "riuson";
+    return "riuson";
 }
 
-/* Plugin description */
+// Plugin description
 const char* ts3plugin_description() {
-	return "This plugin just displays overlay.";
+    return "This plugin just displays overlay.\nWritten on Qt " QT_VERSION_STR;
 }
 
-/* Set TeamSpeak 3 callback functions */
+// Set TeamSpeak 3 callback functions
 void ts3plugin_setFunctionPointers(const struct TS3Functions funcs) {
-	ts3Functions = funcs;
+    //ts3Functions = funcs;
 }
 
-/*
-* Custom code called right after loading the plugin. Returns 0 on success, 1 on failure.
-* If the function returns 1 on failure, the plugin will be unloaded again.
-*/
+//
+// Custom code called right after loading the plugin. Returns 0 on success, 1 on failure.
+// If the function returns 1 on failure, the plugin will be unloaded again.
+//
 int ts3plugin_init() {
 
-	ts3_applet_init();
+    pluginObj = new Ts3_overlay();
 
-	return 0;  /* 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning */
-	/* -2 is a very special case and should only be used if a plugin displays a dialog (e.g. overlay) asking the user to disable
-	* the plugin again, avoiding the show another dialog by the client telling the user the plugin failed to load.
-	* For normal case, if a plugin really failed to load because of an error, the correct return value is 1. */
+    return 0;
+    // 0 = success, 1 = failure, -2 = failure but client will not show a "failed to load" warning
+    // -2 is a very special case and should only be used if a plugin displays a dialog (e.g. overlay) asking the user to disable
+    // the plugin again, avoiding the show another dialog by the client telling the user the plugin failed to load.
+    // For normal case, if a plugin really failed to load because of an error, the correct return value is 1.
 }
 
-/* Custom code called right before the plugin is unloaded */
+// Custom code called right before the plugin is unloaded
 void ts3plugin_shutdown() {
-	ts3_applet_shutdown();
 
-	/* Free pluginID if we registered it */
-	if(pluginID) {
-		free(pluginID);
-		pluginID = NULL;
-	}
+    delete pluginObj;
+    pluginObj = NULL;
+
+    // Free pluginID if we registered it
+    //if(pluginID) {
+    //    free(pluginID);
+    //    pluginID = NULL;
+    //}
 }
 
-/************************** TeamSpeak callbacks ***************************/
-/*
-* Following functions are optional, feel free to remove unused callbacks.
-* See the clientlib documentation for details on each function.
-*/
+//****************************** Optional functions ********************************
+//
+// Following functions are optional, if not needed you don't need to implement them.
+//
 
-/* Clientlib */
-
-int ts3plugin_onTextMessageEvent(uint64 serverConnectionHandlerID, anyID targetMode, anyID toID, anyID fromID, const char* fromName, const char* fromUniqueIdentifier, const char* message, int ffIgnored) {
-	/* Friend/Foe manager has ignored the message, so ignore here as well. */
-	if(ffIgnored) {
-		return 0; /* Client will ignore the message anyways, so return value here doesn't matter */
-	}
-
-	wchar_t *sender, *wcmessage;
-	int size;
-
-	// Convert the multibyte strings to wide chars
-	size = MultiByteToWideChar(CP_UTF8, 0, fromName, -1, NULL, 0);
-	sender = new wchar_t[size];
-	MultiByteToWideChar(CP_UTF8, 0, fromName, -1, sender, size);
-
-	size = MultiByteToWideChar(CP_UTF8, 0, message, -1, NULL, 0);
-	wcmessage = new wchar_t[size];
-	MultiByteToWideChar(CP_UTF8, 0, message, -1, wcmessage, size);
-
-	// Push the message to G19
-	ts3_applet_newMessage(sender, wcmessage, targetMode);
-
-	// Free the memory
-	delete[] sender, wcmessage;
-
-	return 0;  /* 0 = handle normally, 1 = client will ignore the text message */
+// Tell client if plugin offers a configuration window. If this function is not implemented, it's an assumed "does not offer" (PLUGIN_OFFERS_NO_CONFIGURE). */
+int ts3plugin_offersConfigure() {
+    // Return values:
+    // PLUGIN_OFFERS_NO_CONFIGURE - Plugin does not implement ts3plugin_configure
+    // PLUGIN_OFFERS_CONFIGURE_NEW_THREAD - Plugin does implement ts3plugin_configure and requests to run this function in an own thread
+    // PLUGIN_OFFERS_CONFIGURE_QT_THREAD - Plugin does implement ts3plugin_configure and requests to run this function in the Qt GUI thread
+    return PLUGIN_OFFERS_CONFIGURE_QT_THREAD;
 }
 
-void ts3plugin_onClientMoveEvent(uint64 serverConnectionHandlerID, anyID clientID, uint64 oldChannelID, uint64 newChannelID, int visibility, const char* moveMessage) {
-	char *channelName;
-	wchar_t *wcChannelName;
-	int size;
-	anyID client;
+/* Plugin might offer a configuration window. If ts3plugin_offersConfigure returns 0, this function does not need to be implemented. */
+void ts3plugin_configure(void* handle, void* qParentWidget) {
+    Q_UNUSED(handle);
 
-	// Only the own client
-	ts3Functions.getClientID(serverConnectionHandlerID, &client);
-	if(!(clientID == client))
-	{
-		return;
-	}
-
-	// Get channel name
-	if(ts3Functions.getChannelVariableAsString(serverConnectionHandlerID, newChannelID, CHANNEL_NAME, &channelName) != ERROR_ok)
-	{
-		return;
-	}
-
-	// Convert the channel name to wide chars
-	size = MultiByteToWideChar(CP_UTF8, 0, channelName, -1, NULL, 0);
-	wcChannelName = new wchar_t[size];
-	MultiByteToWideChar(CP_UTF8, 0, channelName, -1, wcChannelName, size);
-
-	// Write it on G19
-	ts3_applet_updateChannel(wcChannelName);
-
-	// Free the memory
-	ts3Functions.freeMemory(channelName);
-	delete[] wcChannelName;
+    if (pluginObj != NULL) {
+        QWidget *parent = (QWidget*)qParentWidget;
+        pluginObj->runSettings(parent);
+    }
 }
 
-void ts3plugin_onClientMoveMovedEvent(uint64 serverConnectionHandlerID, anyID clientID, uint64 oldChannelID, uint64 newChannelID, int visibility, anyID moverID, const char* moverName, const char* moverUniqueIdentifier, const char* moveMessage) {
-	ts3plugin_onClientMoveEvent(serverConnectionHandlerID, clientID, oldChannelID, newChannelID, visibility, moveMessage);
-}
+// Helper function to create a hotkey
+//static struct PluginHotkey* createHotkey(const char* keyword, const char* description) {
+//    struct PluginHotkey* hotkey = (struct PluginHotkey*)malloc(sizeof(struct PluginHotkey));
+//    _strcpy(hotkey->keyword, PLUGIN_HOTKEY_BUFSZ, keyword);
+//    _strcpy(hotkey->description, PLUGIN_HOTKEY_BUFSZ, description);
+//    return hotkey;
+//}
+
+// Some makros to make the code to create hotkeys a bit more readable
+#define BEGIN_CREATE_HOTKEYS(x) const size_t sz = x + 1; size_t n = 0; *hotkeys = (struct PluginHotkey**)malloc(sizeof(struct PluginHotkey*) * sz);
+#define CREATE_HOTKEY(a, b) (*hotkeys)[n++] = createHotkey(a, b);
+#define END_CREATE_HOTKEYS (*hotkeys)[n++] = NULL; assert(n == sz);
+
+//
+// Initialize plugin hotkeys. If your plugin does not use this feature, this function can be omitted.
+// Hotkeys require ts3plugin_registerPluginID and ts3plugin_freeMemory to be implemented.
+// This function is automatically called by the client after ts3plugin_init.
+//
+//void ts3plugin_initHotkeys(struct PluginHotkey*** hotkeys) {
+    // Register hotkeys giving a keyword and a description.
+    // The keyword will be later passed to ts3plugin_onHotkeyEvent to identify which hotkey was triggered.
+    // The description is shown in the clients hotkey dialog. */
+
+    //BEGIN_CREATE_HOTKEYS(5); /* Create n hotkeys. Size must be correct for allocating memory. */
+    //    CREATE_HOTKEY("TS3_NEXT_TAB_AND_TALK_START", "Next Tab and Talk Start");
+    //    CREATE_HOTKEY("TS3_NEXT_TAB_AND_WHISPER_ALL_CC_START", "Next Tab and Whisper all Channel Commanders Start");
+    //    CREATE_HOTKEY("TS3_SWITCH_N_TALK_END", "SnT Stop");
+    //    CREATE_HOTKEY("CHANNEL_MUTER", "Toggle Channel Mute");
+    //    CREATE_HOTKEY("PS_TOGGLE", "Toggle Priority Speaker");
+    //END_CREATE_HOTKEYS;
+
+    // The client will call ts3plugin_freeMemory to release all allocated memory
+//}
