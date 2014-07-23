@@ -2,6 +2,8 @@
 #include "ui_formoverlay.h"
 
 #include <QDateTime>
+#include "../../classes/userdata.h"
+#include "../../classes/userdatalist.h"
 
 FormOverlay::FormOverlay(QWidget *parent) :
     QWidget(parent),
@@ -9,22 +11,39 @@ FormOverlay::FormOverlay(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Tool);
+    this->mUsers = new UserDataList(this);
 }
 
 FormOverlay::~FormOverlay()
 {
     delete ui;
+
+    delete this->mUsers;
+    this->mUsers = NULL;
 }
 
 void FormOverlay::clientTalk(const QString &displayName, bool active)
 {
-    if (active) {
-        QString msg = QString("%1\n%2") \
-                .arg(QDateTime::currentDateTime().toString()) \
-                .arg(displayName);
+    UserData *data = new UserData(this);
 
-        this->ui->label->setText(msg);
-    } else {
-        this->ui->label->setText(QString());
+    data->setName(displayName);
+    data->setTime(QDateTime::currentDateTime());
+    data->setTalking(active);
+
+    this->mUsers->append(data);
+
+    this->displayUsersList();
+}
+
+void FormOverlay::displayUsersList()
+{
+    int count = this->mUsers->count();
+    QString result = QString();
+
+    for (int i = 0; i < count; i++) {
+        const UserData *data = this->mUsers->at(i);
+        result.append(QString("%1 %2 %3\n").arg(data->time().toString()).arg(data->name()).arg(data->talking()));
     }
+
+    this->ui->label->setText(result);
 }
