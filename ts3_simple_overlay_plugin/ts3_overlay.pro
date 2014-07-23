@@ -12,7 +12,8 @@ TEMPLATE = lib
 DEFINES += TS3_OVERLAY_LIBRARY
 
 SOURCES += ts3_overlay.cpp \
-    plugin.cpp
+    plugin.cpp \
+    gui/overlay/formoverlay.cpp
 
 HEADERS += ts3_overlay.h\
     ts3_overlay_global.h \
@@ -23,9 +24,13 @@ HEADERS += ts3_overlay.h\
     includes/public_errors.h \
     includes/public_errors_rare.h \
     includes/public_rare_definitions.h \
-    includes/ts3_functions.h
+    includes/ts3_functions.h \
+    gui/overlay/formoverlay.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+FORMS += \
+    gui/overlay/formoverlay.ui
