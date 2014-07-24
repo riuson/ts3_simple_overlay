@@ -57,11 +57,15 @@ void FormOverlay::updateDisplay()
     this->mUsers->cleanUp(5000);
 
     int count = this->mUsers->count();
-    QString result = QString();
+    QString result = QString("<ul>");
 
     for (int i = 0; i < count; i++) {
+        result.append("<li>");
         result.append(this->formatUserData(this->mUsers->at(i)));
+        result.append("</li>");
     }
+
+    result.append("</ul>");
 
     this->ui->label->setText(result);
 }
