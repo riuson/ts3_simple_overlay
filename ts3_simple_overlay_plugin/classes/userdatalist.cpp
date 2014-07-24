@@ -18,6 +18,21 @@ int UserDataList::count() const
 
 void UserDataList::append(UserData *data)
 {
+    // remove old data
+    int count = this->mList.count();
+
+    for (int i = count - 1; i >= 0; i--) {
+        if (this->mList.at(i)->name() == data->name()) {
+            UserData *oldData = this->mList.at(i);
+            this->mList.removeAt(i);
+            delete oldData;
+            this->mList.insert(i, data);
+
+            return;
+        }
+    }
+
+    // add new data
     this->mList.append(data);
 }
 
