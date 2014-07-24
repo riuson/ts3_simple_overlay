@@ -17,6 +17,11 @@ FormOverlay::FormOverlay(QWidget *parent) :
     flags |= Qt::WindowStaysOnTopHint;
     this->setWindowFlags(flags);
 
+    // transparent window
+    //setStyleSheet("background:transparent;");
+    //setAttribute(Qt::WA_TranslucentBackground);
+    //setWindowFlags(flags | Qt::FramelessWindowHint);
+
     this->mUsers = new UserDataList(this);
 
     this->mTimer = new QTimer(this);
