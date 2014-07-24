@@ -14,6 +14,7 @@ FormOverlay::FormOverlay(QWidget *parent) :
 
     Qt::WindowFlags flags = this->windowFlags();
     flags = Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint;
+    flags |= Qt::WindowStaysOnTopHint;
     this->setWindowFlags(flags);
 
     this->mUsers = new UserDataList(this);
