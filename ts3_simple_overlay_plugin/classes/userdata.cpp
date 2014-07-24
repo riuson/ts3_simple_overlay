@@ -5,6 +5,7 @@ UserData::UserData(QObject *parent) :
 {
     this->setName(QString());
     this->setTime(QDateTime::currentDateTime());
+    this->setServerName(QString());
 }
 
 UserData::~UserData()
@@ -39,4 +40,14 @@ bool UserData::talking() const
 void UserData::setTalking(bool value)
 {
     this->mTalking = value;
+}
+
+QString UserData::serverName() const
+{
+    return this->mServerName;
+}
+
+void UserData::setServerName(const QString &value)
+{
+    this->mServerName = value;
 }

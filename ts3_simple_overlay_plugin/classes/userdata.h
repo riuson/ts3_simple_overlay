@@ -21,10 +21,14 @@ public:
     bool talking() const;
     void setTalking(bool value);
 
+    QString serverName() const;
+    void setServerName(const QString &value);
+
 private:
     QString mName;
     QDateTime mTime;
     bool mTalking;
+    QString mServerName;
 
 signals:
 

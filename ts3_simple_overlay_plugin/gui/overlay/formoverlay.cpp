@@ -66,8 +66,9 @@ void FormOverlay::updateDisplay()
 
 QString FormOverlay::formatUserData(const UserData *data) const
 {
-    QString result = QString("%1 %2 %3\n"). \
+    QString result = QString("%1 %2 %3 %4\n"). \
             arg(data->time().toString("HH:mm:ss")). \
+            arg(data->serverName()). \
             arg(data->name()). \
             arg(data->talking());
     return result;

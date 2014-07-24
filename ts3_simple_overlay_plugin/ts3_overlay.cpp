@@ -53,6 +53,12 @@ void Ts3_overlay::onTalkStatusChangeEvent(quint64 serverConnectionHandlerID, qin
         UserData *data = new UserData();
         data->setName(clientName);
         data->setTalking(status == 1);
+
+        char *p_serverVar;
+        if (this->mTS3Funcs.getServerVariableAsString(serverConnectionHandlerID, VIRTUALSERVER_NAME, &p_serverVar) == 0) {
+            data->setServerName(QString(p_serverVar));
+        }
+
         this->mOverlay->clientTalk(data);
     }
 }
