@@ -6,6 +6,7 @@
 #include <QDateTime>
 
 #include "gui/overlay/formoverlay.h"
+#include "classes/userdata.h"
 
 Ts3_overlay::Ts3_overlay()
 {
@@ -49,6 +50,9 @@ void Ts3_overlay::onTalkStatusChangeEvent(quint64 serverConnectionHandlerID, qin
     if (this->mTS3Funcs.getClientDisplayName(serverConnectionHandlerID, clientID, name, sizeof(name)) == 0) {
         QString clientName = QString(name);
 
-        this->mOverlay->clientTalk(clientName, status == 1);
+        UserData *data = new UserData();
+        data->setName(clientName);
+        data->setTalking(status == 1);
+        this->mOverlay->clientTalk(data);
     }
 }

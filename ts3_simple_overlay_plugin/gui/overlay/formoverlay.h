@@ -19,7 +19,7 @@ public:
     explicit FormOverlay(QWidget *parent = 0);
     virtual ~FormOverlay();
 
-    void clientTalk(const QString &displayName, bool active);
+    void clientTalk(UserData *data);
 
 private:
     Ui::FormOverlay *ui;

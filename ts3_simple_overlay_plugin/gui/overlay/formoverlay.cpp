@@ -39,14 +39,8 @@ FormOverlay::~FormOverlay()
     this->mUsers = NULL;
 }
 
-void FormOverlay::clientTalk(const QString &displayName, bool active)
+void FormOverlay::clientTalk(UserData *data)
 {
-    UserData *data = new UserData(this);
-
-    data->setName(displayName);
-    data->setTime(QDateTime::currentDateTime());
-    data->setTalking(active);
-
     this->mUsers->append(data);
 
     this->updateDisplay();
