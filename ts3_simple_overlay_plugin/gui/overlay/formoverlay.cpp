@@ -2,6 +2,7 @@
 #include "ui_formoverlay.h"
 
 #include <QDateTime>
+#include <QTimer>
 #include "../../classes/userdata.h"
 #include "../../classes/userdatalist.h"
 
@@ -12,10 +13,16 @@ FormOverlay::FormOverlay(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowFlags(Qt::Tool);
     this->mUsers = new UserDataList(this);
+
+    this->mTimer = new QTimer(this);
+    this->connect(this->mTimer, SIGNAL(timeout()), SLOT(updateDisplay()));
+    this->mTimer->start(1000);
 }
 
 FormOverlay::~FormOverlay()
 {
+    this->mTimer->stop();
+
     delete ui;
 
     delete this->mUsers;
@@ -32,17 +39,18 @@ void FormOverlay::clientTalk(const QString &displayName, bool active)
 
     this->mUsers->append(data);
 
-    this->displayUsersList();
+    this->updateDisplay();
 }
 
-void FormOverlay::displayUsersList()
+void FormOverlay::updateDisplay()
 {
+    this->mUsers->cleanUp(5000);
+
     int count = this->mUsers->count();
     QString result = QString();
 
     for (int i = 0; i < count; i++) {
-        const UserData *data = this->mUsers->at(i);
-        result.append(this->formatUserData(data));
+        result.append(this->formatUserData(this->mUsers->at(i)));
     }
 
     this->ui->label->setText(result);

@@ -17,8 +17,12 @@ public:
     void append(UserData *data);
     const UserData *at(int index) const;
 
+    void cleanUp(qint64 older_than_ms);
+
 private:
     QList<UserData *> mList;
+
+    void replaceEqual(UserData *data);
 
 signals:
 

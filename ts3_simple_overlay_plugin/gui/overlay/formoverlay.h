@@ -9,6 +9,7 @@ class FormOverlay;
 
 class UserDataList;
 class UserData;
+class QTimer;
 
 class FormOverlay : public QWidget
 {
@@ -24,9 +25,12 @@ private:
     Ui::FormOverlay *ui;
 
     UserDataList *mUsers;
+    QTimer *mTimer;
 
-    void displayUsersList();
     QString formatUserData(const UserData *data) const;
+
+private slots:
+    void updateDisplay();
 };
 
 #endif // FORMOVERLAY_H
