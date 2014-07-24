@@ -11,7 +11,11 @@ FormOverlay::FormOverlay(QWidget *parent) :
     ui(new Ui::FormOverlay)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::Tool);
+
+    Qt::WindowFlags flags = this->windowFlags();
+    flags = Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint;
+    this->setWindowFlags(flags);
+
     this->mUsers = new UserDataList(this);
 
     this->mTimer = new QTimer(this);
