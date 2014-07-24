@@ -42,8 +42,17 @@ void FormOverlay::displayUsersList()
 
     for (int i = 0; i < count; i++) {
         const UserData *data = this->mUsers->at(i);
-        result.append(QString("%1 %2 %3\n").arg(data->time().toString()).arg(data->name()).arg(data->talking()));
+        result.append(this->formatUserData(data));
     }
 
     this->ui->label->setText(result);
+}
+
+QString FormOverlay::formatUserData(const UserData *data) const
+{
+    QString result = QString("%1 %2 %3\n"). \
+            arg(data->time().toString("HH:mm:ss")). \
+            arg(data->name()). \
+            arg(data->talking());
+    return result;
 }

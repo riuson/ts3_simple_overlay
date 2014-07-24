@@ -8,6 +8,7 @@ class FormOverlay;
 }
 
 class UserDataList;
+class UserData;
 
 class FormOverlay : public QWidget
 {
@@ -25,6 +26,7 @@ private:
     UserDataList *mUsers;
 
     void displayUsersList();
+    QString formatUserData(const UserData *data) const;
 };
 
 #endif // FORMOVERLAY_H
