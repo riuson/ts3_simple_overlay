@@ -8,6 +8,7 @@ class FormOverlay;
 }
 
 class QTimer;
+class QTextDocument;
 class UserData;
 class UserDataList;
 class UserDataListFormatter;
@@ -28,9 +29,11 @@ private:
     QTimer *mTimer;
     UserDataList *mUsers;
     UserDataListFormatter *mFormatter;
+    QTextDocument *mDocument;
 
 private slots:
     void updateDisplay();
+    void displayHtmlCss(const QString &html, const QString &css);
 };
 
 #endif // FORMOVERLAY_H

@@ -5,6 +5,7 @@
 
 class UserData;
 class UserDataList;
+class QStringList;
 
 class UserDataListFormatter : public QObject
 {
@@ -13,9 +14,11 @@ public:
     explicit UserDataListFormatter(QObject *parent = 0);
 
     QString formatUserList(const UserDataList *list) const;
+    QString getStyle() const;
 
 private:
     QString formatUserData(const UserData *data) const;
+    QStringList collectServerNames(const UserDataList *list) const;
 
 signals:
 

@@ -3,6 +3,8 @@
 
 #include <QDateTime>
 #include <QTimer>
+#include <QTextDocument>
+#include <QLabel>
 #include "../../classes/userdata.h"
 #include "../../classes/userdatalist.h"
 #include "../../classes/userdatalistformatter.h"
@@ -23,6 +25,8 @@ FormOverlay::FormOverlay(QWidget *parent) :
     //setAttribute(Qt::WA_TranslucentBackground);
     //setWindowFlags(flags | Qt::FramelessWindowHint);
 
+    this->mDocument = new QTextDocument;
+
     this->mUsers = new UserDataList(this);
     this->mFormatter = new UserDataListFormatter(this);
 
@@ -42,6 +46,9 @@ FormOverlay::~FormOverlay()
 
     delete this->mUsers;
     this->mUsers = NULL;
+
+    delete this->mDocument;
+    this->mDocument = NULL;
 }
 
 void FormOverlay::clientTalk(UserData *data)
@@ -55,7 +62,19 @@ void FormOverlay::updateDisplay()
 {
     this->mUsers->cleanUp(5000);
 
-    QString formattedList = this->mFormatter->formatUserList(this->mUsers);
+    QString html = this->mFormatter->formatUserList(this->mUsers);
+    QString css = this->mFormatter->getStyle();
 
-    this->ui->label->setText(formattedList);
+    this->displayHtmlCss(html, css);
+}
+
+void FormOverlay::displayHtmlCss(const QString &html, const QString &css)
+{
+    this->mDocument->clear();
+
+    this->mDocument->addResource(QTextDocument::StyleSheetResource, QUrl("style.css"), css);
+    this->mDocument->setHtml(html);
+
+    this->ui->textBrowser->setDocument(this->mDocument);
+    //this->ui->textBrowser->setPlainText(html);
 }
