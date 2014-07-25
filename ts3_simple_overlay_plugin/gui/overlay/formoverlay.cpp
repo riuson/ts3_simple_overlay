@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QTextDocument>
 #include <QLabel>
+#include <QColor>
+#include <QPalette>
 #include "../../classes/userdata.h"
 #include "../../classes/userdatalist.h"
 #include "../../classes/userdatalistformatter.h"
@@ -74,6 +76,21 @@ void FormOverlay::displayHtmlCss(const QString &html, const QString &css)
 
     this->mDocument->addResource(QTextDocument::StyleSheetResource, QUrl("style.css"), css);
     this->mDocument->setHtml(html);
+
+#if 0
+    // create transparent color
+    QColor transparent (255, 255, 255);
+    transparent.setAlpha (0);
+
+    this->ui->textBrowser->viewport()->setAutoFillBackground(false);
+    QPalette palette = this->ui->textBrowser->palette();
+    palette.setColor(QPalette::Window, transparent);
+    this->ui->textBrowser->setPalette(palette);
+    this->ui->textBrowser->setAttribute(Qt::WA_TranslucentBackground);
+#else // alternative
+    this->ui->textBrowser->viewport()->setAutoFillBackground(false);
+    this->ui->textBrowser->setAttribute(Qt::WA_TranslucentBackground);
+#endif
 
     this->ui->textBrowser->setDocument(this->mDocument);
     //this->ui->textBrowser->setPlainText(html);
