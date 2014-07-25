@@ -13,7 +13,10 @@ DEFINES += TS3_OVERLAY_LIBRARY
 
 SOURCES += ts3_overlay.cpp \
     plugin.cpp \
-    gui/overlay/formoverlay.cpp
+    gui/overlay/formoverlay.cpp \
+    classes/userdata.cpp \
+    classes/userdatalist.cpp \
+    classes/userdatalistformatter.cpp
 
 HEADERS += ts3_overlay.h\
     ts3_overlay_global.h \
@@ -25,7 +28,10 @@ HEADERS += ts3_overlay.h\
     includes/public_errors_rare.h \
     includes/public_rare_definitions.h \
     includes/ts3_functions.h \
-    gui/overlay/formoverlay.h
+    gui/overlay/formoverlay.h \
+    classes/userdata.h \
+    classes/userdatalist.h \
+    classes/userdatalistformatter.h
 
 unix {
     target.path = /usr/lib
