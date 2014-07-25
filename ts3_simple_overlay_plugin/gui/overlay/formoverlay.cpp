@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "../../classes/userdata.h"
 #include "../../classes/userdatalist.h"
+#include "../../classes/userdatalistformatter.h"
 
 FormOverlay::FormOverlay(QWidget *parent) :
     QWidget(parent),
@@ -23,6 +24,7 @@ FormOverlay::FormOverlay(QWidget *parent) :
     //setWindowFlags(flags | Qt::FramelessWindowHint);
 
     this->mUsers = new UserDataList(this);
+    this->mFormatter = new UserDataListFormatter(this);
 
     this->mTimer = new QTimer(this);
     this->connect(this->mTimer, SIGNAL(timeout()), SLOT(updateDisplay()));
@@ -34,6 +36,9 @@ FormOverlay::~FormOverlay()
     this->mTimer->stop();
 
     delete ui;
+
+    delete this->mFormatter;
+    this->mFormatter = NULL;
 
     delete this->mUsers;
     this->mUsers = NULL;
@@ -50,26 +55,7 @@ void FormOverlay::updateDisplay()
 {
     this->mUsers->cleanUp(5000);
 
-    int count = this->mUsers->count();
-    QString result = QString("<ul>");
+    QString formattedList = this->mFormatter->formatUserList(this->mUsers);
 
-    for (int i = 0; i < count; i++) {
-        result.append("<li>");
-        result.append(this->formatUserData(this->mUsers->at(i)));
-        result.append("</li>");
-    }
-
-    result.append("</ul>");
-
-    this->ui->label->setText(result);
-}
-
-QString FormOverlay::formatUserData(const UserData *data) const
-{
-    QString result = QString("%1 %2 %3 %4\n"). \
-            arg(data->time().toString("HH:mm:ss")). \
-            arg(data->serverName()). \
-            arg(data->name()). \
-            arg(data->talking());
-    return result;
+    this->ui->label->setText(formattedList);
 }

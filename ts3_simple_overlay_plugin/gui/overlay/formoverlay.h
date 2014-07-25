@@ -7,9 +7,10 @@ namespace Ui {
 class FormOverlay;
 }
 
-class UserDataList;
-class UserData;
 class QTimer;
+class UserData;
+class UserDataList;
+class UserDataListFormatter;
 
 class FormOverlay : public QWidget
 {
@@ -24,10 +25,9 @@ public:
 private:
     Ui::FormOverlay *ui;
 
-    UserDataList *mUsers;
     QTimer *mTimer;
-
-    QString formatUserData(const UserData *data) const;
+    UserDataList *mUsers;
+    UserDataListFormatter *mFormatter;
 
 private slots:
     void updateDisplay();
